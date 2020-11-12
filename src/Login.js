@@ -42,7 +42,7 @@ export default class Login extends Component {
               ? 'MAGIC LOGIN LOADING SPINNER'
               :
               <button>
-                Login already
+                Login already. Why not?
           </button>
           }
         </form>

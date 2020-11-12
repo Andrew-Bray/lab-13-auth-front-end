@@ -14,6 +14,8 @@ export default class SignUp extends Component {
       .post(`https://nameless-cove-11254.herokuapp.com/auth/signup`)
       .send(this.state);
 
+    this.props.handleMyTokenChange(user.body.token, user.body.email);
+    this.props.history.push('/todos')
     console.log(user.body);
   }
   render() {
