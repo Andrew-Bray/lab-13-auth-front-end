@@ -22,6 +22,7 @@ export default class Login extends Component {
     this.props.history.push('/todos');
   }
   render() {
+    const { email, password, loading } = this.state;
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -29,15 +30,15 @@ export default class Login extends Component {
           <label>
             Email:
             <input onChange={(e) => this.setState({ email: e.target.value })}
-              value={this.state.email} />
+              value={email} />
           </label>
           <label>
             Password:
             <input onChange={(e) => this.setState({ password: e.target.value })}
-              value={this.state.password} type="password" />
+              value={password} type="password" />
           </label>
           {
-            this.state.loading
+            loading
               ? 'MAGIC LOGIN LOADING SPINNER'
               :
               <button>

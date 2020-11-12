@@ -14,19 +14,22 @@ export default class Todos extends Component {
   }
 
   fetchTodos = async () => {
+    const { token } = this.props;
     await this.setState({ loading: true })
-    const response = await request.get(`https://nameless-cove-11254.herokuapp.com/api/todos`)
-      .set('Authorization', this.props.token)
-    await this.setState({ todos: response.body, loading: false })
+    const { body } = await request.get(`https://nameless-cove-11254.herokuapp.com/api/todos`)
+      .set('Authorization', token)
+    await this.setState({ todos: body, loading: false })
   }
 
   handleSubmit = async (e) => {
+    const { token } = this.props;
+    const { myTodo } = this.state;
     e.preventDefault();
 
     await request.post(`https://nameless-cove-11254.herokuapp.com/api/todos/`)
-      .set('Authorization', this.props.token)
+      .set('Authorization', token)
       .send({
-        todo: this.state.myTodo,
+        todo: myTodo,
       })
 
     await this.fetchTodos();
@@ -34,14 +37,15 @@ export default class Todos extends Component {
   }
 
   handleCompletion = async (myId) => {
-
+    const { token } = this.props;
     await request.put(`https://nameless-cove-11254.herokuapp.com/api/todos/${myId}`)
-      .set('Authorization', this.props.token)
+      .set('Authorization', token)
 
     await this.fetchTodos();
   }
 
   render() {
+    const { loading, todos, myTodo } = this.state;
     return (
       <div>
         The magic page of all of your todos
@@ -49,7 +53,7 @@ export default class Todos extends Component {
           <label>
             Todo:
             <input
-              value={this.state.myTodo}
+              value={myTodo}
               onChange={(e) => this.setState({ myTodo: e.target.value })}
               placeholder="Add Task"
             />
@@ -59,9 +63,9 @@ export default class Todos extends Component {
           </button>
         </form>
         {
-          this.state.loading ?
+          loading ?
             `patience enough! We're getting your list` :
-            this.state.todos.map(todo =>
+            todos.map(todo =>
               <div key={`${todo.id}${Math.random()}`}
                 style={{ textDecoration: todo.is_done ? 'line-through' : 'none' }}>
                 Task: {todo.todo}

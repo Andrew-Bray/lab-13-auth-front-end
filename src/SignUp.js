@@ -17,18 +17,19 @@ export default class SignUp extends Component {
     console.log(user.body);
   }
   render() {
+    const { email, password } = this.state;
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
           <label>
             Email:
             <input onChange={(e) => this.setState({ email: e.target.value })}
-              value={this.state.email} />
+              value={email} />
           </label>
           <label>
             Password:
             <input onChange={(e) => this.setState({ password: e.target.value })}
-              value={this.state.password} type="password" />
+              value={password} type="password" />
           </label>
           <button>
             Sign up, why don'cha
