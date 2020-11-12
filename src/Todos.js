@@ -14,10 +14,10 @@ export default class Todos extends Component {
   }
 
   fetchTodos = async () => {
+    await this.setState({ loading: true })
     const response = await request.get(`https://nameless-cove-11254.herokuapp.com/api/todos`)
       .set('Authorization', this.props.token)
-
-    this.setState({ todos: response.body })
+    await this.setState({ todos: response.body, loading: false })
   }
 
   handleSubmit = async (e) => {
@@ -59,17 +59,19 @@ export default class Todos extends Component {
           </button>
         </form>
         {
-          !!this.state.todos.length &&
-          this.state.todos.map(todo =>
-            <div key={`${todo.id}${Math.random()}`}>
-              Task: {todo.todo}
-              {
-                todo.is_done ? '' :
-                  <button onClick={() => { this.handleCompletion(todo.id) }}>
-                    Completed!
+          this.state.loading ?
+            `patience enough! We're getting your list` :
+            this.state.todos.map(todo =>
+              <div key={`${todo.id}${Math.random()}`}
+                style={{ textDecoration: todo.is_done ? 'line-through' : 'none' }}>
+                Task: {todo.todo}
+                {
+                  todo.is_done ? '' :
+                    <button onClick={() => { this.handleCompletion(todo.id) }}>
+                      Completed!
                   </button>
-              }
-            </div>)
+                }
+              </div>)
         }
       </div>
     )
